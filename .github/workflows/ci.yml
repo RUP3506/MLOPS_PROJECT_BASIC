@@ -40,6 +40,8 @@ jobs:
           python -m src.features.preprocessing
 
       - name: Train model
+        env:
+          MLFLOW_TRACKING_URI: sqlite:///mlflow-ci.db
         run: |
           python -m src.models.train
 

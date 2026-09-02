@@ -62,7 +62,7 @@ def train_model():
 
         mlflow.sklearn.log_model(
             model_pipeline,
-            "model"
+            name="model"
         )
 
         logger.info("Model trained successfully")

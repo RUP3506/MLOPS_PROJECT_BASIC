@@ -1,0 +1,94 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion
+    deps:
+    - path: src/data/data_ingestion.py
+      hash: md5
+      md5: d7db7c6b314e06d7895c468673a5f650
+      size: 906
+    outs:
+    - path: data/raw/breast_cancer.csv
+      hash: md5
+      md5: 5afc23b9622f8f9ffa60824f4e97d0d5
+      size: 121385
+  preprocessing:
+    cmd: python -m src.features.preprocessing
+    deps:
+    - path: data/raw/breast_cancer.csv
+      hash: md5
+      md5: 5afc23b9622f8f9ffa60824f4e97d0d5
+      size: 121385
+    - path: params.yaml
+      hash: md5
+      md5: 0fb60730e7dc49ca2dde43c9ccea5af1
+      size: 94
+    - path: src/features/preprocessing.py
+      hash: md5
+      md5: c762bf8f17c5e27bca1f6f12ae98feea
+      size: 1339
+    outs:
+    - path: data/processed/X_test.csv
+      hash: md5
+      md5: 191bc9e15b42b684911f0c291ffb7023
+      size: 24495
+    - path: data/processed/X_train.csv
+      hash: md5
+      md5: dbd67ca44149591076762d16a34b18bf
+      size: 96230
+    - path: data/processed/y_test.csv
+      hash: md5
+      md5: e9381deb61417d99a9671a86be38c0b6
+      size: 235
+    - path: data/processed/y_train.csv
+      hash: md5
+      md5: d963ec95cdd3478ccd4b6e8f9719d649
+      size: 917
+  training:
+    cmd: python -m src.models.train
+    deps:
+    - path: data/processed/X_train.csv
+      hash: md5
+      md5: dbd67ca44149591076762d16a34b18bf
+      size: 96230
+    - path: data/processed/y_train.csv
+      hash: md5
+      md5: d963ec95cdd3478ccd4b6e8f9719d649
+      size: 917
+    - path: params.yaml
+      hash: md5
+      md5: 0fb60730e7dc49ca2dde43c9ccea5af1
+      size: 94
+    - path: src/models/train.py
+      hash: md5
+      md5: 1651446d979579d3a308ba4d385f7c4b
+      size: 1844
+    outs:
+    - path: models/breast_cancer_model.joblib
+      hash: md5
+      md5: 7a62dac4ceda887f4f38b94aab3bea72
+      size: 3073
+  evaluation:
+    cmd: python -m src.models.evaluate
+    deps:
+    - path: data/processed/X_test.csv
+      hash: md5
+      md5: 191bc9e15b42b684911f0c291ffb7023
+      size: 24495
+    - path: data/processed/y_test.csv
+      hash: md5
+      md5: e9381deb61417d99a9671a86be38c0b6
+      size: 235
+    - path: models/breast_cancer_model.joblib
+      hash: md5
+      md5: 7a62dac4ceda887f4f38b94aab3bea72
+      size: 3073
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: 52353b5f92a077680537bd91c43ae3fb
+      size: 1403
+    outs:
+    - path: metrics/metrics.json
+      hash: md5
+      md5: 0929162b6c16c8426b7a684d7a029ec6
+      size: 129
